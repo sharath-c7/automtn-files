@@ -1,0 +1,26 @@
+@Library('libararysome') _
+
+def gitrepo="git@github.com:Pay-libararysome/newrelic-account-limits-monitoring"
+def imagename="newrelic-account-limits-monitoring"
+
+def scmVars
+def branch="master"
+node {
+  stage("Build"){
+    scmVars = checkout(
+    scm:[
+      $class: 'GitSCM',
+      branches: [[name: branch]],
+      userRemoteConfigs: [[url: gitrepo, credentialsId: "git"]]
+      ])
+  }
+
+  wrap([$class: 'BuildUser']) {
+    if (env.BUILD_USER == null) {
+      echo "dockerwrapper.deploy() was skipped."
+    } else {
+      def version = dockerwrapper.build(imagename, branch, scmVars.GIT_COMMIT)
+      dockerwrapper.deploy(imagename, version, 'dev', env['deploy'] == "true")
+    }
+  }
+}

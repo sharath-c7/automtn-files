@@ -1,0 +1,26 @@
+FROM python:3.9-slim-buster
+
+# ENV NEW_RELIC_API_KEY=${NEW_RELIC_API_KEY} \
+#     NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY} \
+#     ACCOUNT_ID=${ACCOUNT_ID} \
+#     NR_ENV=${NR_ENV}
+# ddba87557d28f9064ac6fd0615c38c37FFFFNRAL
+
+# DEV ACCOUNT
+# ENV NEW_RELIC_API_KEY='NRAK-26TY9LVB3J5LAQ1TSB7ZW3YSOJI' \
+#     NEW_RELIC_LICENSE_KEY='082c1153fe121fcb0ca76b647e1167a5FFFFNRAL' \
+#     ACCOUNT_ID='2667487' \
+#     NR_ENV='dev'
+
+# PROD ACCOUNT 
+ENV NEW_RELIC_API_KEY='NRAK-oasidhjfoihdsfohd' \
+    NEW_RELIC_LICENSE_KEY='JOASHDF(*D&UF)UDOF*' \
+    ACCOUNT_ID='2223324254' \
+    NR_ENV='prod'
+
+# Copy function code
+COPY scripts/. .
+COPY requirements.txt  .
+RUN  pip3 install -r requirements.txt
+
+CMD ["python3", "./scheduler.py"]
